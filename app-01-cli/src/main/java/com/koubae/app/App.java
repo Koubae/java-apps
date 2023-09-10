@@ -20,6 +20,7 @@ public class App {
 
     public void run() {
         System.out.printf("%s", Constants.WELCOME_BANNER);
+        System.out.printf(String.format(Constants.WELCOME_MESSAGE, name()));
     }
 
     public String name() {
