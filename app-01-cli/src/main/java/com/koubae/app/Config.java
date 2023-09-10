@@ -6,7 +6,7 @@ import java.util.Properties;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-public class Config {
+public final class Config {
     public static class ConfigException extends Exception {
         public ConfigException(String errorMessage) {
             super(errorMessage);
@@ -20,6 +20,24 @@ public class Config {
     }
 
     Config() throws ConfigException {
+        Properties properties = loadApplicationProperties();
+
+        appName = properties.getProperty("app.name", null);
+        appVersion = properties.getProperty("app.version", null);
+    }
+
+    private final String appName;
+    private final String appVersion;
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    private Properties loadApplicationProperties() throws ConfigException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         Properties properties = new Properties();
 
@@ -30,12 +48,7 @@ public class Config {
             throw new ConfigException("application.properties could not be loaded, error " + error);
         }
 
-        appName = properties.getProperty("app.name", "NOT_FOUND");
+        return properties;
     }
 
-    private final String appName;
-
-    public String getAppName() {
-        return appName;
-    }
 }

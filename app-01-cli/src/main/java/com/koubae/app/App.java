@@ -16,7 +16,6 @@ public class App {
 
     public App() {
         logger.info(String.format("AppName=%s", configuration.getAppName()));
-
     }
 
 }
