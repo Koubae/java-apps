@@ -53,7 +53,7 @@
     </licenses>
 
     <modules>
-        <module>app-01-cli</module>
+        <module>app-01-JavPyShell</module>
     </modules>
 
     <dependencies>

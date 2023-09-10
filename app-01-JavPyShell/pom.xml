@@ -9,8 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>app-01-cli</artifactId>
-    <name>app01Cli</name>
-    <description>Simple CLI App, nth 1 from java-apps</description>
+    <artifactId>app-01-JavPyShell</artifactId>
+    <name>JavPyShell</name>
+    <description>Simple CLI JavPyShell, nth 1 from java-apps, emulate python shell</description>
 
 </project>

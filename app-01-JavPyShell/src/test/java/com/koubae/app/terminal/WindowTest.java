@@ -10,6 +10,10 @@ class WindowTest {
     void welcomeMessageWontPrintIfSystemSettingsIsOff() {
         System.setProperty("sys.app.welcome", "false");
         Window window = new Window(new App());
-        window.start();
+        try {
+            window.start();
+        } catch (Window.WindowException error) {
+            System.err.printf("Error occurred %s\n", error);
+        }
     }
 }

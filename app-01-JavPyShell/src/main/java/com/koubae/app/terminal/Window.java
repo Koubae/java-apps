@@ -4,7 +4,9 @@ import com.koubae.app.App;
 import com.koubae.app.Config;
 import com.koubae.app.Constants;
 
+import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Window {
@@ -12,14 +14,42 @@ public class Window {
     private static final int WELCOME_WAIT_MAX = 85;
 
     private final App app;
+    private final TerminalReader terminal;
     private static final Logger logger = Logger.getLogger(Config.class.getName());
 
     public Window(App application) {
         app = application;
+        terminal = new TerminalReader();
     }
 
-    public void start() {
+    public static class WindowException extends Exception {
+        public WindowException(String errorMessage) {
+            super(errorMessage);
+        }
+    }
+
+    public void start() throws WindowException {
         welcome();
+        loop();
+    }
+
+    private void loop() throws WindowException {
+        boolean running = true;
+        try {
+            while (running) {
+                String userInput = terminal.input(">>> ");
+                System.out.printf("User wrote -> %s\n", userInput);
+                if (Objects.equals(userInput, CommandsBase.EXIT.toString()) || Objects.equals(userInput, CommandsBase.QUIT.toString())) {
+                    running = false;
+                    // todo: write goodbye here
+                }
+
+            }
+
+        } catch (Exception error) {
+            logger.log(Level.SEVERE, String.format("Window loop interrupted with an error %s", error), error);
+            throw new WindowException(String.format("Window loop had an error (%s), exiting", error));
+        }
     }
 
     /**
@@ -43,6 +73,13 @@ public class Window {
             wait(randomIntegerRange());
             System.out.print(character);
         }
+
+        System.out.print(Constants.WELCOME_HELP_COMMAND);
+        CommandsBase[] commands = CommandsBase.values();
+        for (CommandsBase c: commands) {
+            System.out.printf("- %s\n", c);
+        }
+
     }
 
     private void wait(int milliseconds) {

@@ -23,7 +23,12 @@ public class App {
     }
 
     public void run() {
-        window.start();
+        try {
+            window.start();
+        } catch (Window.WindowException error) {
+            System.err.printf("App closing for error %s", error);
+            System.exit(1);
+        }
     }
 
     public String name() {
