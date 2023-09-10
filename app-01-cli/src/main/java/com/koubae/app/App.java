@@ -2,6 +2,8 @@ package com.koubae.app;
 
 import java.util.logging.Logger;
 
+import com.koubae.app.terminal.Window;
+
 public class App {
 
     private static Config configuration = null;
@@ -14,13 +16,14 @@ public class App {
         }
     }
 
-    private static final Logger logger = Logger.getLogger(Config.class.getName());
+    private final Window window;
 
-    public App() {}
+    public App() {
+        window = new Window(this);
+    }
 
     public void run() {
-        System.out.printf("%s", Constants.WELCOME_BANNER);
-        System.out.printf(String.format(Constants.WELCOME_MESSAGE, name()));
+        window.start();
     }
 
     public String name() {

@@ -11,4 +11,5 @@ class AppTest {
         assertNotNull(app.name());
 
     }
+
 }

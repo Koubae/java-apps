@@ -12,7 +12,7 @@ public final class Constants {
                                                              \s
                                                              \s
 """;
-    public static final String WELCOME_MESSAGE = "Welcome to %s, type /help for help and command instruction";
+    public static final String WELCOME_MESSAGE = "Welcome to %s, type /help for help and command instruction...\n";
 
     private Constants() {}
 }
