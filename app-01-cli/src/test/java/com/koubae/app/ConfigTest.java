@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ConfigTest {
     @Test
-    public void givenAppConfiguration_WhenLoaded_ThenReadsProperties() throws Config.ConfigException {
+    void givenAppConfiguration_WhenLoaded_ThenReadsProperties() throws Config.ConfigException {
         Config configuration = new Config();
 
         assertNotNull(configuration.getAppName());
