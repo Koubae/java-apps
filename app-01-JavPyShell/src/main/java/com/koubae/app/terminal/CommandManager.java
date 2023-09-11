@@ -18,14 +18,12 @@ public class CommandManager {
                 window.help();
                 break;
             case LS:
-                System.out.printf("Action %s is a LS command!\n", userInput);
                 shell.ls();
                 break;
             case PWD:
-                System.out.printf("Action %s is a PWD command!\n", userInput);
+                shell.pwd();
                 break;
             case RUN_PY:
-                System.out.printf("Action %s is a python command!\n", userInput);
                 break;
             default:
                 break;

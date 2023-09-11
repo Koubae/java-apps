@@ -24,12 +24,19 @@ public class Shell {
     }
 
     public void ls() {
-        String lsCommand = switch (sysOS) {
+        executeShellCommand(switch (sysOS) {
             case WIN -> "dir";
             case UNIX -> "ls -lah";
             default -> null;
-        };
-        executeShellCommand(lsCommand);
+        });
+    }
+
+    public void pwd() {
+        executeShellCommand(switch (sysOS) {
+            case WIN -> "echo %cd%";
+            case UNIX -> "pwd";
+            default -> null;
+        });
     }
 
     private void executeShellCommand(String command) {
