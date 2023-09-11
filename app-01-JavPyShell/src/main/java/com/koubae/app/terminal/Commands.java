@@ -1,8 +1,10 @@
 package com.koubae.app.terminal;
 
 public enum Commands {
+    DEFAULT(""),
     DIR("/dir"),
-    LS("/ls")
+    LS("/ls"),
+    PWD("/pwd")
     ;
 
     private final String command;
@@ -14,6 +16,26 @@ public enum Commands {
     @Override
     public String toString() {
         return command;
+    }
+
+    static public Commands getOrDefault(String input) {
+        input = input.toLowerCase();
+        for (Commands value: Commands.values()) {
+            if (value.command.equals(input)) {
+                return value;
+            }
+        }
+
+        return DEFAULT;
+    }
+
+    static public void printValues() {
+        Commands[] commands = Commands.values();
+        for (Commands command: commands) {
+            if (command.toString().trim().isEmpty())
+                continue;
+            System.out.printf("- %s\n", command);
+        }
     }
 
 }

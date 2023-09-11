@@ -4,7 +4,6 @@ import com.koubae.app.App;
 import com.koubae.app.Config;
 import com.koubae.app.Constants;
 
-import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,11 +14,16 @@ public class Window {
 
     private final App app;
     private final TerminalReader terminal;
+    private final CommandManager commandManager;
     private static final Logger logger = Logger.getLogger(Config.class.getName());
+
+    private boolean running = true;
+
 
     public Window(App application) {
         app = application;
         terminal = new TerminalReader();
+        commandManager = new CommandManager(this);
     }
 
     public static class WindowException extends Exception {
@@ -33,14 +37,31 @@ public class Window {
         loop();
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
+    /**
+     * Prints to Console user help
+     */
+    public void help() {
+        System.out.print("\n" + Constants.WELCOME_BANNER);
+        System.out.printf((Constants.HELP_TEXT) + "%n" + "\n", app.name());
+
+        printHelpBaseCommand();
+        printHelpCommand();
+    }
+
     private void loop() throws WindowException {
-        boolean running = true;
         try {
             while (running) {
                 String userInput = terminal.input(">>> ");
-                System.out.printf("User wrote -> %s\n", userInput);
-                if (Objects.equals(userInput, CommandsBase.EXIT.toString()) || Objects.equals(userInput, CommandsBase.QUIT.toString())) {
+                System.out.println("Command requested "  + userInput);
+                try {
+                    commandManager.action(userInput);
+                } catch (CommandManager.CommandManagerQuitException ignored_) {
                     running = false;
+                    terminal.close();
                     // todo: write goodbye here
                 }
 
@@ -51,6 +72,7 @@ public class Window {
             throw new WindowException(String.format("Window loop had an error (%s), exiting", error));
         }
     }
+
 
     /**
      * Prints a Welcome Message to stdout with delay, faking the pace as if someone is really typing it
@@ -73,13 +95,19 @@ public class Window {
             wait(randomIntegerRange());
             System.out.print(character);
         }
+        printHelpBaseCommand();
+    }
 
-        System.out.print(Constants.WELCOME_HELP_COMMAND);
-        CommandsBase[] commands = CommandsBase.values();
-        for (CommandsBase c: commands) {
-            System.out.printf("- %s\n", c);
-        }
+    private void printHelpBaseCommand() {
+        System.out.print(Constants.HELP_COMMAND_BASE);
+        CommandsBase.printValues();
+        System.out.print("\n");
+    }
 
+    private void printHelpCommand() {
+        System.out.print(Constants.HELP_COMMAND);
+        Commands.printValues();
+        System.out.print("\n");
     }
 
     private void wait(int milliseconds) {
