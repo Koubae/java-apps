@@ -11,6 +11,7 @@ public final class Constants {
               \\/                \\/            \\/      \\/     \\/          \s
 """;
     public static final String WELCOME_MESSAGE = "Welcome to %s, type /help for help and command instruction...\n";
+    public static final String GOODBYE_MESSAGE = "\nThanks for using %s, now shutting down...\n\n";
 
 
     public static final String HELP_COMMAND_BASE = "These are the base commands:\n";

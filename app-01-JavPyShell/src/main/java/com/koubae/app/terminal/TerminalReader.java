@@ -46,7 +46,7 @@ public class TerminalReader {
     }
 
     private String _inputString() {
-        String output = "";
+        String output = null;
         if (scanner.hasNextLine()) {
             output = scanner.nextLine();
         }

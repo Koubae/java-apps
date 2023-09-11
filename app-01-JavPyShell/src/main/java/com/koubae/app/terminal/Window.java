@@ -58,14 +58,15 @@ public class Window {
     private void loop() throws WindowException {
         try {
             while (running) {
-                String userInput = terminal.input(">>> ");
-                System.out.println("Command requested "  + userInput);
                 try {
+                    String userInput = terminal.input(">>> ");
                     commandManager.action(userInput);
-                } catch (CommandManager.CommandManagerQuitException ignored_) {
+                } catch (NullPointerException ignored) {
                     running = false;
-                    terminal.close();
-                    // todo: write goodbye here
+                    System.out.println();
+                    logger.info("Received Closing Signal");
+                } catch (CommandManager.CommandManagerQuitException  ignored) {
+                    running = false;
                 }
 
             }
@@ -73,6 +74,8 @@ public class Window {
         } catch (Exception error) {
             logger.log(Level.SEVERE, String.format("Window loop interrupted with an error %s", error), error);
             throw new WindowException(String.format("Window loop had an error (%s), exiting", error));
+        } finally {
+            goodbye();
         }
     }
 
@@ -99,6 +102,11 @@ public class Window {
             System.out.print(character);
         }
         printHelpBaseCommand();
+    }
+
+    private void goodbye() {
+        terminal.close();
+        System.out.printf(Constants.GOODBYE_MESSAGE, app.name());
     }
 
     private void printHelpBaseCommand() {
