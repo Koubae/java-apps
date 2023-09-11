@@ -13,6 +13,14 @@ public final class Config {
         }
     }
 
+    public enum OS {
+        UNKNOWN,
+        WIN,
+        MAC,
+        UNIX,
+        SOLARIS
+    }
+
     private static final Logger logger = Logger.getLogger(Config.class.getName());
 
     static {
@@ -24,10 +32,17 @@ public final class Config {
 
         appName = properties.getProperty("app.name", null);
         appVersion = properties.getProperty("app.version", null);
+        sysOS = determineOS();
+        if (sysOS != OS.WIN && sysOS != OS.UNIX) {
+            throw new ConfigException(String.format(
+                    "Operating system %s is not supported, currently only Windows or Linux are", System.getProperty("os.name")));
+        }
     }
 
     private final String appName;
     private final String appVersion;
+    private final OS sysOS;
+
 
     public String getAppName() {
         return appName;
@@ -35,6 +50,10 @@ public final class Config {
 
     public String getAppVersion() {
         return appVersion;
+    }
+
+    public OS getSysOS() {
+        return sysOS;
     }
 
     private Properties loadApplicationProperties() throws ConfigException {
@@ -49,6 +68,23 @@ public final class Config {
         }
 
         return properties;
+    }
+
+    private OS determineOS() {
+        String systemOS = System.getProperty("os.name").toLowerCase();
+        logger.info(String.format("Running On %s\n", systemOS));
+        if (systemOS.contains("win")) {
+            return OS.WIN;
+        } else if (systemOS.contains("mac")) {
+            return OS.MAC;
+        } else if (systemOS.contains("nix") || systemOS.contains("nux") || systemOS.contains("aix")) {
+            return OS.UNIX;
+        } else if (systemOS.contains("sunos")) {
+            return OS.SOLARIS;
+        } else {
+            return OS.UNKNOWN;
+        }
+
     }
 
 }

@@ -40,6 +40,9 @@ public class Window {
     public boolean isRunning() {
         return running;
     }
+    public App getApp() {
+        return app;
+    }
 
     /**
      * Prints to Console user help

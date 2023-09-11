@@ -34,4 +34,8 @@ public class App {
     public String name() {
         return configuration.getAppName();
     }
+
+    public Config.OS os() {
+        return configuration.getSysOS();
+    }
 }
