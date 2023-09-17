@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class Shell {
     private static final Logger logger = Logger.getLogger(CommandManager.class.getName());
@@ -83,7 +84,7 @@ public class Shell {
     }
 
     private void createShellProcess(String command) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder(shell[0], shell[1], command);
+        ProcessBuilder builder = new ProcessBuilder((String[]) Stream.of(shell, command).toArray(java.io.Serializable[]::new));
         builder.redirectErrorStream(true);
         shellProcess = builder.start();
     }

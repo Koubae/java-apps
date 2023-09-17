@@ -31,6 +31,10 @@ public class App {
         }
     }
 
+    public Config getConfiguration() {
+        return configuration;
+    }
+
     public String name() {
         return configuration.getAppName();
     }
@@ -38,4 +42,5 @@ public class App {
     public Config.OS os() {
         return configuration.getSysOS();
     }
+
 }

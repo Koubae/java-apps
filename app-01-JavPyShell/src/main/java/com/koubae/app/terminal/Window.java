@@ -105,6 +105,7 @@ public class Window {
     }
 
     private void goodbye() {
+        commandManager.close();
         terminal.close();
         System.out.printf(Constants.GOODBYE_MESSAGE, app.name());
     }

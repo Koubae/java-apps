@@ -32,6 +32,7 @@ public final class Config {
 
         appName = properties.getProperty("app.name", null);
         appVersion = properties.getProperty("app.version", null);
+        terminalCommandStackSize = Integer.parseInt(properties.getProperty("app.terminal.command.stack.size",  "100"));
         sysOS = determineOS();
         if (sysOS != OS.WIN && sysOS != OS.UNIX) {
             throw new ConfigException(String.format(
@@ -39,10 +40,14 @@ public final class Config {
         }
     }
 
+    private final OS sysOS;
     private final String appName;
     private final String appVersion;
-    private final OS sysOS;
+    private final int terminalCommandStackSize;
 
+    public OS getSysOS() {
+        return sysOS;
+    }
 
     public String getAppName() {
         return appName;
@@ -52,8 +57,8 @@ public final class Config {
         return appVersion;
     }
 
-    public OS getSysOS() {
-        return sysOS;
+    public int getTerminalCommandStackSize() {
+        return terminalCommandStackSize;
     }
 
     private Properties loadApplicationProperties() throws ConfigException {

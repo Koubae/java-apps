@@ -4,10 +4,12 @@ package com.koubae.app.terminal;
 public class CommandManager {
     private final Window window;
     private final Shell shell;
+    private final PythonShell pythonShell;
 
     public CommandManager(Window window) {
         this.window = window;
         this.shell = new Shell(window.getApp().os());
+        this.pythonShell = new PythonShell(window.getApp().os());
     }
 
     public Action action(String userInput) throws CommandManagerQuitException {
@@ -24,12 +26,17 @@ public class CommandManager {
                 shell.pwd();
                 break;
             case RUN_PY:
+                pythonShell.run(userInputCommand);
                 break;
             default:
                 break;
 
         }
         return actionCommands;
+    }
+
+    public void close() {
+        pythonShell.close();
     }
 
     public static class CommandManagerException extends Exception {
@@ -68,8 +75,8 @@ public class CommandManager {
         };
     }
 
-    private Action isPythonCommand(String userInput) {
-        return Action.CONTINUE;
+    private Action isPythonCommand(String ignored) {
+        return Action.RUN_PY;
     }
 
 }
