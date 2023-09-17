@@ -13,6 +13,7 @@ public class Shell {
 
     private final Config.OS sysOS;
     private final String[] shell;
+    private Process shellProcess = null;
 
     public Shell(Config.OS operetingSystem) {
         sysOS = operetingSystem;
@@ -45,17 +46,13 @@ public class Shell {
     }
 
     private CommandOutput runShellCommand(String command) {
-        Process subProcess = null;
         StringBuilder output = new StringBuilder();
         int exitVal = -1;
         try {
 
-            ProcessBuilder builder = new ProcessBuilder(shell[0], shell[1], command);
-            builder.redirectErrorStream(true);
-            subProcess = builder.start();
-
-            readProcessOutput(subProcess, output);
-            exitVal = subProcess.waitFor();
+            shellCommandOnStart(command);
+            readProcessOutput(shellProcess, output);
+            exitVal = shellProcess.waitFor();
 
         } catch (InterruptedException error) {
             output.insert(0, String.format("InterruptedException while running command %s, error %s", command, error));
@@ -67,13 +64,28 @@ public class Shell {
             output.insert(0, String.format("Exception while running command %s, error %s", command, error));
             logger.log(Level.SEVERE, String.format("Exception while running command %s", command), error);
         } finally {
-            if (subProcess != null && subProcess.isAlive()) {
-                subProcess.destroy();
-            }
+            shellCommandOnEnd();
         }
 
         return new CommandOutput(command, output.toString(), exitVal);
 
+    }
+
+    protected void shellCommandOnStart(String command) throws IOException {
+        createShellProcess(command);
+    }
+
+    protected void shellCommandOnEnd()  {
+        if (shellProcess != null && shellProcess.isAlive()) {
+            shellProcess.destroy();
+        }
+        shellProcess = null;
+    }
+
+    private void createShellProcess(String command) throws IOException {
+        ProcessBuilder builder = new ProcessBuilder(shell[0], shell[1], command);
+        builder.redirectErrorStream(true);
+        shellProcess = builder.start();
     }
 
     private void readProcessOutput(Process subProcess, StringBuilder output) throws IOException {
