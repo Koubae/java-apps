@@ -1,17 +1,25 @@
-01 CLI App
+JavPyShell
 ==========
 
 _Simple and minimalistic CLI App written in Vanilla Java_
+
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+
+[![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg)](https://github.com/Naereen/StrapDown.js/blob/master/LICENSE)
 
 
 Features
 --------
 
-* Enable user to save predetermined commands and saved them in a internal database (sql or something can even be JSON)
-* Command are saved via alias
-* Once Application runs, it will run the alias
-* List the aliases 
-* ping
-* DNS lookup 
-* process 
-* sniff Ip 
+* Runs few simple LINUX commands like `ls` or `pwd`
+* Create a python interpreter
+* Runs python interpreter under the hood via processes
+
+### Youtube Video
+
+TODO
+
+
+### Github / Markdown Budget
+
+**Credit to [Naereen](https://github.com/Naereen/badges)**

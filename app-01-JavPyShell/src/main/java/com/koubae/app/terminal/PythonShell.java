@@ -10,24 +10,19 @@ import java.util.logging.Logger;
 public class PythonShell {
     private static final int COMMAND_QUEUE_MAX_SIZE = 100;
     private static final Logger logger = Logger.getLogger(CommandManager.class.getName());
-    private final Window window;
 
-    private final Config.OS sysOS;
     private final String[] shell;
     private Process process;
-    private ArrayBlockingQueue<String> queue;
+    private final ArrayBlockingQueue<String> queue;
 
-    public PythonShell(Window window) {
-        this.window = window;
-        sysOS = window.getApp().os();
-        shell = switch (sysOS) {
+    public PythonShell(Config.OS operetingSystem) {
+        shell = switch (operetingSystem) {
             case WIN -> new String[]{"python", "-i"};
             case UNIX -> new String[]{"python3", "-i"};
             default -> null;
         };
 
         queue = new ArrayBlockingQueue<>(COMMAND_QUEUE_MAX_SIZE);
-
         startPython();
     }
 
@@ -78,8 +73,8 @@ public class PythonShell {
                     writer.write(command);
                     writer.newLine();
                     writer.flush();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
+                } catch (IOException | InterruptedException error) {
+                    logger.log(Level.SEVERE, "Unexpected error in threadPipeIn", error);
                 }
             }
         });
@@ -95,8 +90,8 @@ public class PythonShell {
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line.replace(">>> ", "").replace("... ", ""));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException error) {
+                logger.log(Level.SEVERE, "Unexpected error in threadPipeOut", error);
             }
 
         });

@@ -16,7 +16,6 @@ public class Window {
     private final App app;
     private final TerminalReader terminal;
     private final CommandManager commandManager;
-    private String nextLineToken  = ">>> ";
     private static final Logger logger = Logger.getLogger(Config.class.getName());
 
     private boolean running = true;
@@ -48,11 +47,7 @@ public class Window {
     }
 
     public String getNextLineToken() {
-        return nextLineToken;
-    }
-
-    public void setNextLineToken(String token) {
-        nextLineToken = token;
+        return ">>> ";
     }
 
     /**

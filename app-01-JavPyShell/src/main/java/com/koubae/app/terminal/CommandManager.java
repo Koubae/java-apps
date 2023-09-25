@@ -9,7 +9,7 @@ public class CommandManager {
     public CommandManager(Window window) {
         this.window = window;
         this.shell = new Shell(window.getApp().os());
-        this.pythonShell = new PythonShell(window);
+        this.pythonShell = new PythonShell(window.getApp().os());
     }
 
     public Action action(String userInput) throws CommandManagerQuitException {
