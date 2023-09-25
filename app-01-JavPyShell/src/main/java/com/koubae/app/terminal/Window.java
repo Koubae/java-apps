@@ -11,10 +11,12 @@ import java.util.logging.Logger;
 public class Window {
     private static final int WELCOME_WAIT_MIN = 1;
     private static final int WELCOME_WAIT_MAX = 85;
+    private static final int PYTHON_OUTPUT_WAIT_TIME_MILLISECONDS = 250;
 
     private final App app;
     private final TerminalReader terminal;
     private final CommandManager commandManager;
+    private String nextLineToken  = ">>> ";
     private static final Logger logger = Logger.getLogger(Config.class.getName());
 
     private boolean running = true;
@@ -22,8 +24,9 @@ public class Window {
 
     public Window(App application) {
         app = application;
-        terminal = new TerminalReader();
         commandManager = new CommandManager(this);
+        wait(250);
+        terminal = new TerminalReader();
     }
 
     public static class WindowException extends Exception {
@@ -44,6 +47,14 @@ public class Window {
         return app;
     }
 
+    public String getNextLineToken() {
+        return nextLineToken;
+    }
+
+    public void setNextLineToken(String token) {
+        nextLineToken = token;
+    }
+
     /**
      * Prints to Console user help
      */
@@ -59,8 +70,11 @@ public class Window {
         try {
             while (running) {
                 try {
-                    String userInput = terminal.input(">>> ");
-                    commandManager.action(userInput);
+
+                    String userInput = terminal.input(getNextLineToken());
+                    Action action = commandManager.action(userInput);
+                    waitForPythonOutput(action);
+
                 } catch (NullPointerException ignored) {
                     running = false;
                     System.out.println();
@@ -84,7 +98,7 @@ public class Window {
      * Prints a Welcome Message to stdout with delay, faking the pace as if someone is really typing it
      */
     private void welcome() {
-        if (!Boolean.parseBoolean(System.getProperty("sys.app.welcome", "true"))) {
+        if (!app.getConfiguration().getAppWelcome()) {
             return;
         }
         System.out.printf("%s", Constants.WELCOME_BANNER);
@@ -128,6 +142,11 @@ public class Window {
         } catch (InterruptedException ignored_) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    private void waitForPythonOutput(Action action) {
+        if (action.equals(Action.RUN_PY))
+            wait(PYTHON_OUTPUT_WAIT_TIME_MILLISECONDS);
     }
 
     private int randomIntegerRange() {

@@ -11,5 +11,6 @@ class ConfigTest {
 
         assertNotNull(configuration.getAppName());
         assertNotNull(configuration.getAppVersion());
+        assertFalse(configuration.getAppWelcome());
     }
 }

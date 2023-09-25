@@ -10,14 +10,16 @@ import java.util.logging.Logger;
 public class PythonShell {
     private static final int COMMAND_QUEUE_MAX_SIZE = 100;
     private static final Logger logger = Logger.getLogger(CommandManager.class.getName());
+    private final Window window;
 
     private final Config.OS sysOS;
     private final String[] shell;
     private Process process;
     private ArrayBlockingQueue<String> queue;
 
-    public PythonShell(Config.OS operetingSystem) {
-        sysOS = operetingSystem;
+    public PythonShell(Window window) {
+        this.window = window;
+        sysOS = window.getApp().os();
         shell = switch (sysOS) {
             case WIN -> new String[]{"python", "-i"};
             case UNIX -> new String[]{"python3", "-i"};
@@ -91,7 +93,7 @@ public class PythonShell {
             String line;
             try {
                 while ((line = reader.readLine()) != null) {
-                    System.out.println("\n" + line.replace(">>> ", "").replace("... ", ""));
+                    System.out.println(line.replace(">>> ", "").replace("... ", ""));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

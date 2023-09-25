@@ -4,6 +4,6 @@
 
 
 # welcome screen off
-#java -Dsys.app.welcome=false -classpath ./target/classes com.koubae.MainApp01Cli
+#java -Dapp.welcome=false -classpath ./target/classes com.koubae.MainApp01Cli
 # welcome screen on
-java -Dsys.app.welcome=true -classpath ./target/classes com.koubae.MainApp01Cli
+java -Dapp.welcome=true -classpath ./target/classes com.koubae.MainApp01Cli

@@ -84,7 +84,9 @@ public class Shell {
     }
 
     private void createShellProcess(String command) throws IOException {
-        ProcessBuilder builder = new ProcessBuilder((String[]) Stream.of(shell, command).toArray(java.io.Serializable[]::new));
+        String[] shellProcessCommand = java.util.Arrays.copyOf(shell, shell.length + 1);
+        shellProcessCommand[shell.length] = command;
+        ProcessBuilder builder = new ProcessBuilder(shellProcessCommand);
         builder.redirectErrorStream(true);
         shellProcess = builder.start();
     }
